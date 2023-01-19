@@ -9,12 +9,12 @@ import xgboost
 from datetime import datetime, timedelta
 
 project = hopsworks.login(
-    api_key_value="B8TDkmcSyPyWFM2o.YuXEbXM7MUFk5gdBXFXsbMz24uZipqY4BttbZ9wIoZ0cn9vQd4bSWgj57vDGXqdh")
+    api_key_value="")
 
 mr = project.get_model_registry()
-model = mr.get_model("air_model_3", version=1)
+model = mr.get_model("air_model_4", version=1)
 model_dir = model.download()
-model = joblib.load(model_dir + "/air_model3.pkl")
+model = joblib.load(model_dir + "/air_model4.pkl")
 
 
 def forecast():
@@ -33,18 +33,20 @@ def forecast():
     y = X.pop("aqi_next_day")
     X = X.drop(columns=['city', 'conditions']).fillna(0)
 
-    today_data = X[1:2]
+    today_data = X[1:8]
     y = model.predict(today_data)
 
-    res = int(y[0])
+    res = []
+    for i in y:
+        res.append(int(i))
     return res
 
 
-date_today = datetime.now()
-day = timedelta(days=1)
-date_today = date_today + day
-date_today = date_today.strftime("%Y-%m-%d")
-output_label = date_today + " 's air quality is "
+# date_today = datetime.now()
+# day = timedelta(days = 1)
+# date_today = date_today + day
+# date_today = date_today.strftime("%Y-%m-%d")
+output_label = " The air quality for the next 7 days is "
 
 demo = gr.Interface(
     fn=forecast,
