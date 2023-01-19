@@ -1,0 +1,10 @@
+hopsworks
+joblib
+scikit-learn
+python-dotenv
+xgboost==0.90
+seaborn
+dataframe-image
+modal-client
+gradio
+datetime
